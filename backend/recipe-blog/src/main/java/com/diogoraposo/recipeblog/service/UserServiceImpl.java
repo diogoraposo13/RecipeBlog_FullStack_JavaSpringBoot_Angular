@@ -1,5 +1,6 @@
 package com.diogoraposo.recipeblog.service;
 
+import com.diogoraposo.recipeblog.config.JwtProvider;
 import com.diogoraposo.recipeblog.model.User;
 import com.diogoraposo.recipeblog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtProvider jwtProvider;
 
     @Override
     public User findUserById(Long userId) throws Exception {
@@ -26,26 +29,24 @@ public class UserServiceImpl implements UserService{
         throw new Exception("user not found with id " +userId);
     }
 
-    @Override
-    public User createUser(User user) throws Exception {
-        User isExist = userRepository.findByEmail(user.getEmail());
 
-        if(isExist != null){
-            throw new Exception("user exist with " + user.getEmail());
+
+    @Override
+    public User findUserByJwt(String jwt) throws Exception {
+
+        String email = jwtProvider.getEmailFromJwtToken(jwt);
+
+        if(email == null){
+            throw new Exception("provide a valid jwt token...");
         }
 
-        User savedUser = userRepository.save(user);
+        User user = userRepository.findByEmail(email);
 
-        return savedUser;
-    }
+        if(user==null){
+            throw new Exception("user not found with email " +email);
+        }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+        return user;
 
-    @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
     }
 }
