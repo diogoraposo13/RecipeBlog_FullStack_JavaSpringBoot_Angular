@@ -1,13 +1,13 @@
 <mat-card class="example-card">
     <mat-card-header>
       <img mat-card-avatar src="https://www.wilsoncenter.org/sites/default/files/media/images/person/james-person-1.jpg" alt=""/>
-      <mat-card-title>Diogo Raposo</mat-card-title>
+      <mat-card-title>{{recipe.user.fullName}}</mat-card-title>
       <mat-card-subtitle>diogoraposo</mat-card-subtitle>
     </mat-card-header>
-    <img class="max-h-[400px] object-cover" src="https://images.pexels.com/photos/604969/pexels-photo-604969.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Quiche">
+    <img class="max-h-[400px] object-cover" [src]="recipe.image" alt="Quiche">
     <mat-card-content>
       <p>
-        A recipe has no soul. You, as the cook, must bring soul to the recipe.
+        {{recipe.description}}
       </p>
     </mat-card-content>
     <mat-card-actions class="flex justify-between">
@@ -23,7 +23,7 @@
         </button>
       </div>
       <div>
-        <button mat-icon-button aria-label="Example icon button with a home icon">
+        <button (click)="handleDeleteRecipe()" mat-icon-button aria-label="Example icon button with a home icon">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
